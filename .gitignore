@@ -1,1 +1,10 @@
 data/
+
+__pycache__/
+*.pyc
+
+artifacts/*.pkl
+artifacts/*.npz
+artifacts/evaluation_report.json
+
+.streamlit/secrets.toml
