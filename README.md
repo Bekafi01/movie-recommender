@@ -38,9 +38,9 @@ The goal is to build a practical recommendation MVP that is:
 
 ### Screenshot
 
-```markdown
+
 ![App Demo](docs/images/app-demo.png)
-```
+
 
 ---
 
