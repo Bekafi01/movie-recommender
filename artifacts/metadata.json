@@ -1,0 +1,42 @@
+{
+  "created_at": "2026-03-24T07:51:37.935800",
+  "model_type": "Content-Based (CountVectorizer + Cosine Similarity)",
+  "num_movies": 9742,
+  "num_genres": 22,
+  "genres": [
+    "(no",
+    "Action",
+    "Adventure",
+    "Animation",
+    "Children",
+    "Comedy",
+    "Crime",
+    "Documentary",
+    "Drama",
+    "Fantasy",
+    "Film-Noir",
+    "Horror",
+    "IMAX",
+    "Musical",
+    "Mystery",
+    "Romance",
+    "Sci-Fi",
+    "Thriller",
+    "War",
+    "Western",
+    "genres",
+    "listed)"
+  ],
+  "vectorizer_config": {
+    "type": "CountVectorizer",
+    "binary": true,
+    "lowercase": false
+  },
+  "similarity_metric": "cosine",
+  "files": {
+    "vectorizer": "count_vectorizer.pkl",
+    "similarity_matrix": "similarity_matrix.pkl",
+    "data": "movies_data.pkl",
+    "compressed_similarity": "similarity_matrix.npz"
+  }
+}
