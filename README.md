@@ -175,16 +175,6 @@ Latest baseline (`top_k=10`, `min_user_interactions=5`):
 
 ---
 
-## Roadmap
-
-- Add richer content features (tags + title/year signals)
-- Explore hybrid recommender (content + collaborative signals)
-- Introduce tests for core pipeline and app inference path
-- Add CI checks for lint, train smoke test, and evaluation smoke test
-- Improve recommendation explainability in UI (why this was recommended)
-
----
-
 ## Contributing
 
 Contributions are welcome.
