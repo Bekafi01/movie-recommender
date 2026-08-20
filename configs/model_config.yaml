@@ -1,0 +1,37 @@
+popularity:
+  min_vote_percentile: 0.80
+  default_top_k: 10
+
+content_based:
+  tfidf:
+    max_features: 10000
+    ngram_range: [1, 2]
+    stop_words: "english"
+    sublinear_tf: true
+  embeddings:
+    model_name: "all-MiniLM-L6-v2"
+    batch_size: 64
+    normalize_embeddings: true
+    faiss_index_type: "IndexFlatIP"
+
+collaborative:
+  svd:
+    n_factors: 50
+    random_state: 42
+  neural_cf:
+    latent_dim_gmf: 32
+    latent_dim_mlp: 32
+    mlp_layers: [64, 32, 16]
+    dropout: 0.2
+    learning_rate: 0.001
+    weight_decay: 1.0e-5
+    batch_size: 256
+    epochs: 10
+    negative_samples_ratio: 4
+    positive_rating_threshold: 3.5
+
+hybrid:
+  content_weight: 0.5
+  collaborative_weight: 0.5
+  mmr_lambda: 0.7
+  candidate_pool_size: 50

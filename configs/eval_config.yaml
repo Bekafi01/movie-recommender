@@ -1,0 +1,17 @@
+evaluation:
+  top_k_list: [5, 10, 20]
+  default_top_k: 10
+  min_user_interactions: 5
+  positive_rating_threshold: 3.5
+  test_ratio_leave_k: 2
+  random_state: 42
+  metrics:
+    - "ndcg@k"
+    - "map@k"
+    - "recall@k"
+    - "precision@k"
+    - "hit_rate@k"
+    - "mrr@k"
+    - "catalog_coverage"
+    - "novelty"
+    - "intra_list_diversity"

@@ -1,0 +1,30 @@
+project:
+  name: "movie-recommender"
+  version: "0.1.0"
+  random_seed: 42
+  log_level: "INFO"
+
+paths:
+  data_raw_dir: "data/raw"
+  data_processed_dir: "data/processed"
+  artifacts_dir: "artifacts"
+  models_dir: "artifacts/models"
+  embeddings_dir: "artifacts/embeddings"
+  benchmarks_dir: "artifacts/benchmarks"
+
+raw_files:
+  movies_metadata: "movies_metadata.csv"
+  ratings: "ratings_small.csv"
+  credits: "credits.csv"
+  keywords: "keywords.csv"
+  links: "links_small.csv"
+
+processed_files:
+  movies_clean: "movies_clean.parquet"
+  ratings_clean: "ratings_clean.parquet"
+  metadata_soup: "metadata_soup.parquet"
+  movies_sqlite: "movies.db"
+
+tmdb:
+  image_base_url: "https://image.tmdb.org/t/p/w500"
+  api_base_url: "https://api.themoviedb.org/3"
