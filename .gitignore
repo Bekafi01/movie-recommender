@@ -1,10 +1,64 @@
-data/
-
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 
-artifacts/*.pkl
-artifacts/*.npz
-artifacts/evaluation_report.json
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Testing & Linting caches
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Streamlit secrets & config
 .streamlit/secrets.toml
+
+# Data files (raw & processed)
+data/raw/*.csv
+data/raw/*.zip
+data/processed/*.parquet
+data/processed/*.db
+data/processed/*.sqlite
+data/processed/*.csv
+
+# Artifacts (models, embeddings, benchmarks)
+artifacts/embeddings/*.npy
+artifacts/embeddings/*.bin
+artifacts/embeddings/*.faiss
+artifacts/models/*.pkl
+artifacts/models/*.pt
+artifacts/models/*.pth
+artifacts/models/*.joblib
+artifacts/benchmarks/*.json
+artifacts/benchmarks/*.png
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
