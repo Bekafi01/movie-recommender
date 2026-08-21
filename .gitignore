@@ -56,6 +56,7 @@ artifacts/models/*.pth
 artifacts/models/*.joblib
 artifacts/benchmarks/*.json
 artifacts/benchmarks/*.png
+artifacts/scratch/
 
 # OS / IDE
 .DS_Store
