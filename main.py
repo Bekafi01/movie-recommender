@@ -266,5 +266,31 @@ def serve_api(
     uvicorn.run("recsys.serving.api:app", host=host, port=port, reload=reload)
 
 
+@app.command("ui")
+def launch_ui(
+    port: int = typer.Option(8501, "--port", "-p", help="Streamlit web port"),
+) -> None:
+    """Launch the CineFlow AI interactive Streamlit Cinema Experience UI."""
+    import subprocess
+
+    console.print(
+        Panel(
+            f"[bold magenta]Launching CineFlow AI Cinema UI on http://localhost:{port}[/bold magenta]",
+            expand=False,
+        )
+    )
+    subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "streamlit",
+            "run",
+            "src/recsys/ui/app.py",
+            "--server.port",
+            str(port),
+        ]
+    )
+
+
 if __name__ == "__main__":
     app()
