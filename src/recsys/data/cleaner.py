@@ -120,7 +120,9 @@ class DataCleaner:
         df["tmdb_id"] = pd.to_numeric(df["id"], errors="coerce")
         corrupted_count = df["tmdb_id"].isna().sum()
         if corrupted_count > 0:
-            logger.warning(f"Filtered out {corrupted_count} corrupted rows from movies_metadata.csv.")
+            logger.warning(
+                f"Filtered out {corrupted_count} corrupted rows from movies_metadata.csv."
+            )
         df = df.dropna(subset=["tmdb_id"]).copy()
         df["tmdb_id"] = df["tmdb_id"].astype(int)
         df = df.drop_duplicates(subset=["tmdb_id"])
@@ -167,12 +169,16 @@ class DataCleaner:
             lambda val: extract_names(safe_parse_json(val))
         )
         merged["genres_str"] = merged["genres_list"].apply(lambda items: " ".join(items))
-        merged["title"] = merged["title"].fillna(merged.get("original_title", "Untitled")).astype(str)
+        merged["title"] = (
+            merged["title"].fillna(merged.get("original_title", "Untitled")).astype(str)
+        )
         merged["overview"] = merged["overview"].fillna("").astype(str)
         merged["tagline"] = merged["tagline"].fillna("").astype(str)
         merged["release_year"] = merged["release_date"].apply(extract_release_year)
         merged["vote_average"] = pd.to_numeric(merged["vote_average"], errors="coerce").fillna(0.0)
-        merged["vote_count"] = pd.to_numeric(merged["vote_count"], errors="coerce").fillna(0).astype(int)
+        merged["vote_count"] = (
+            pd.to_numeric(merged["vote_count"], errors="coerce").fillna(0).astype(int)
+        )
         merged["popularity"] = pd.to_numeric(merged["popularity"], errors="coerce").fillna(0.0)
         merged["poster_path"] = merged["poster_path"].fillna("").astype(str)
 
@@ -185,9 +191,7 @@ class DataCleaner:
 
         # 7. Compute IMDb weighted rating
         percentile = self.config.popularity.min_vote_percentile
-        merged["weighted_rating"] = calculate_imdb_weighted_rating(
-            merged, percentile=percentile
-        )
+        merged["weighted_rating"] = calculate_imdb_weighted_rating(merged, percentile=percentile)
 
         # Select standard columns
         cols = [

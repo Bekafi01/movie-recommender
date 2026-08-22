@@ -36,7 +36,11 @@ def test_sanitize_entity_name() -> None:
 
 def test_extract_names() -> None:
     """Test extracting names from dict lists."""
-    items = [{"id": 1, "name": "Tom Hanks"}, {"id": 2, "name": "Tim Allen"}, {"id": 3, "name": "Don Rickles"}]
+    items = [
+        {"id": 1, "name": "Tom Hanks"},
+        {"id": 2, "name": "Tim Allen"},
+        {"id": 3, "name": "Don Rickles"},
+    ]
     extracted = extract_names(items, max_items=2)
     assert extracted == ["tom_hanks", "tim_allen"]
 

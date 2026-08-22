@@ -49,7 +49,9 @@ class DataRepository:
         sqlite_movies = movies_df.copy()
         for col in ["genres_list", "keywords_list", "cast_list", "directors_list"]:
             if col in sqlite_movies.columns:
-                sqlite_movies[col] = sqlite_movies[col].apply(lambda x: ", ".join(x) if isinstance(x, list) else str(x))
+                sqlite_movies[col] = sqlite_movies[col].apply(
+                    lambda x: ", ".join(x) if isinstance(x, list) else str(x)
+                )
 
         with sqlite3.connect(sqlite_path) as conn:
             sqlite_movies.to_sql("movies", conn, if_exists="replace", index=False)
@@ -80,21 +82,27 @@ class DataRepository:
         if sqlite_path.exists():
             with sqlite3.connect(sqlite_path) as conn:
                 return pd.read_sql_query("SELECT * FROM movies", conn)
-        raise DataProcessingError(f"Clean movies dataset not found at {path}. Run data preprocessing first.")
+        raise DataProcessingError(
+            f"Clean movies dataset not found at {path}. Run data preprocessing first."
+        )
 
     def load_ratings(self) -> pd.DataFrame:
         """Load clean ratings dataset from Parquet."""
         path = self.config.get_processed_file_path("ratings_clean")
         if path.exists():
             return pd.read_parquet(path)
-        raise DataProcessingError(f"Clean ratings dataset not found at {path}. Run data preprocessing first.")
+        raise DataProcessingError(
+            f"Clean ratings dataset not found at {path}. Run data preprocessing first."
+        )
 
     def load_metadata_soup(self) -> pd.DataFrame:
         """Load metadata soup dataset from Parquet."""
         path = self.config.get_processed_file_path("metadata_soup")
         if path.exists():
             return pd.read_parquet(path)
-        raise DataProcessingError(f"Metadata soup dataset not found at {path}. Run data preprocessing first.")
+        raise DataProcessingError(
+            f"Metadata soup dataset not found at {path}. Run data preprocessing first."
+        )
 
     def search_movies(self, query: str, limit: int = 10) -> list[dict[str, Any]]:
         """Fast SQL search for movies by title substring."""

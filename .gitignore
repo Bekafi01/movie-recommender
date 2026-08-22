@@ -63,3 +63,5 @@ artifacts/scratch/
 Thumbs.db
 *.swp
 *.swo
+
+docs/

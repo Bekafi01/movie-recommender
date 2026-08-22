@@ -12,6 +12,8 @@ from rich.table import Table
 
 from recsys.data.db import DataRepository
 from recsys.data.pipeline import run_data_pipeline
+from recsys.models.hybrid import HybridRecommender
+from recsys.models.trainer import train_all_models
 
 # Ensure utf-8 output on Windows
 if sys.platform == "win32":
@@ -24,7 +26,12 @@ app = typer.Typer(
     add_completion=False,
 )
 data_app = typer.Typer(help="Data ingestion and preprocessing commands")
+train_app = typer.Typer(help="Model training commands")
+rec_app = typer.Typer(help="Inference and recommendation commands")
+
 app.add_typer(data_app, name="data")
+app.add_typer(train_app, name="train")
+app.add_typer(rec_app, name="recommend")
 
 console = Console(highlight=False)
 
@@ -60,7 +67,9 @@ def search_movie(query: str = typer.Argument(..., help="Title substring to searc
             console.print(f"[yellow]No movies found matching '{query}'.[/yellow]")
             return
 
-        table = Table(title=f"Search Results for '{query}'", show_header=True, header_style="bold blue")
+        table = Table(
+            title=f"Search Results for '{query}'", show_header=True, header_style="bold blue"
+        )
         table.add_column("Movie ID", style="dim")
         table.add_column("TMDB ID", style="dim")
         table.add_column("Title", style="bold white")
@@ -82,6 +91,106 @@ def search_movie(query: str = typer.Argument(..., help="Title substring to searc
         console.print(table)
     except Exception as e:
         console.print(f"[bold red]Search failed: {e}[/bold red]")
+        raise typer.Exit(code=1) from e
+
+
+@train_app.command("all")
+def train_all(
+    skip_neural: bool = typer.Option(
+        False, "--skip-neural", help="Skip Neural CF training for faster run"
+    ),
+) -> None:
+    """Train all multi-paradigm recommendation models (Popularity, TF-IDF, Semantic FAISS, SVD, NeuMF)."""
+    console.print(
+        Panel(
+            "[bold green]Training Multi-Paradigm Recommendation Engines[/bold green]", expand=False
+        )
+    )
+    try:
+        results = train_all_models(train_neural_cf=not skip_neural)
+        table = Table(
+            title="Model Artifacts Summary", show_header=True, header_style="bold magenta"
+        )
+        table.add_column("Model Engine", style="cyan")
+        table.add_column("Artifact Path", style="green")
+
+        for model_name, path in results["trained_models"].items():
+            table.add_row(model_name.upper(), path)
+
+        console.print(table)
+        console.print(
+            "[bold green][OK] All models successfully trained and persisted![/bold green]"
+        )
+    except Exception as e:
+        console.print(f"[bold red]Model training failed: {e}[/bold red]")
+        raise typer.Exit(code=1) from e
+
+
+@rec_app.command("movie")
+def recommend_movie(
+    title: str = typer.Argument(..., help="Movie title (e.g., Inception, The Dark Knight)"),
+    top_k: int = typer.Option(5, "--top-k", "-k", help="Number of recommendations"),
+) -> None:
+    """Get recommendations similar to a movie title using Dense Semantic FAISS search."""
+    try:
+        model = HybridRecommender.load()
+        recs = model.recommend(query=title, top_k=top_k)
+
+        table = Table(
+            title=f"Recommendations for '{title}'", show_header=True, header_style="bold green"
+        )
+        table.add_column("Rank", style="cyan")
+        table.add_column("Title", style="bold white")
+        table.add_column("Year", style="dim")
+        table.add_column("Genres", style="magenta")
+        table.add_column("Similarity Score", style="yellow")
+
+        for _, row in recs.iterrows():
+            table.add_row(
+                str(int(row["rank"])),
+                str(row["title"]),
+                str(row.get("release_year", "N/A")),
+                str(row.get("genres_str", "")),
+                f"{row['score']:.1%}" if "score" in row else "N/A",
+            )
+        console.print(table)
+    except Exception as e:
+        console.print(f"[bold red]Recommendation failed: {e}[/bold red]")
+        raise typer.Exit(code=1) from e
+
+
+@rec_app.command("user")
+def recommend_user(
+    user_id: int = typer.Argument(..., help="User ID (e.g., 1, 42, 671)"),
+    top_k: int = typer.Option(5, "--top-k", "-k", help="Number of recommendations"),
+) -> None:
+    """Get personalized hybrid recommendations for a user ID."""
+    try:
+        model = HybridRecommender.load()
+        recs = model.recommend(user_id=user_id, top_k=top_k)
+
+        table = Table(
+            title=f"Personalized Recommendations for User {user_id}",
+            show_header=True,
+            header_style="bold green",
+        )
+        table.add_column("Rank", style="cyan")
+        table.add_column("Title", style="bold white")
+        table.add_column("Year", style="dim")
+        table.add_column("Genres", style="magenta")
+        table.add_column("Predicted Score", style="yellow")
+
+        for _, row in recs.iterrows():
+            table.add_row(
+                str(int(row["rank"])),
+                str(row["title"]),
+                str(row.get("release_year", "N/A")),
+                str(row.get("genres_str", "")),
+                f"{row.get('score', 0.0):.2f}",
+            )
+        console.print(table)
+    except Exception as e:
+        console.print(f"[bold red]Recommendation failed: {e}[/bold red]")
         raise typer.Exit(code=1) from e
 
 
