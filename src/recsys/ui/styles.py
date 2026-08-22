@@ -1,39 +1,42 @@
-"""Ultra-Premium Dark Cinema & Glassmorphism Design System for CineFlow AI."""
+"""Ultra-Clean Blue & White Design System for CineFlow AI."""
 
 CUSTOM_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap');
 
 /* =========================================================================
-   GLOBAL RESET & TYPOGRAPHY
+   GLOBAL BLUE & WHITE THEME VARIABLES
    ========================================================================= */
 :root {
-    --bg-dark: #07090e;
-    --bg-surface: #0e131f;
-    --bg-card: rgba(18, 24, 38, 0.7);
-    --primary: #8b5cf6;
-    --primary-glow: rgba(139, 92, 246, 0.35);
-    --accent-pink: #ec4899;
-    --accent-cyan: #06b6d4;
-    --accent-gold: #f59e0b;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --border-glass: rgba(255, 255, 255, 0.08);
+    --bg-main: #f8fafc;
+    --bg-surface: #ffffff;
+    --primary-blue: #2563eb;
+    --primary-gradient: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%);
+    --accent-cyan: #0284c7;
+    --accent-ice: #eff6ff;
+    --accent-gold: #d97706;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --border-light: #e2e8f0;
+    --border-blue: #bfdbfe;
+    --card-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    --card-hover-shadow: 0 20px 35px -5px rgba(37, 99, 235, 0.18), 0 10px 15px -5px rgba(37, 99, 235, 0.1);
 }
 
 html, body, [class*="css"], .stApp {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
-    background-color: var(--bg-dark) !important;
+    background-color: var(--bg-main) !important;
     color: var(--text-primary) !important;
 }
 
-/* Background Ambient Lighting */
+/* Background Ambient Gradient */
 .stApp {
     background:
-        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 119, 198, 0.15), transparent),
-        radial-gradient(ellipse 60% 40% at 100% 40%, rgba(236, 72, 153, 0.08), transparent),
-        radial-gradient(ellipse 50% 30% at 0% 70%, rgba(6, 182, 212, 0.08), transparent),
-        #07090e !important;
+        radial-gradient(ellipse 80% 50% at 50% -10%, #dbeafe 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 100% 30%, #e0f2fe 0%, transparent 50%),
+        radial-gradient(ellipse 50% 30% at 0% 70%, #eff6ff 0%, transparent 60%),
+        #f8fafc !important;
     background-attachment: fixed !important;
 }
 
@@ -49,20 +52,20 @@ html, body, [class*="css"], .stApp {
 }
 
 /* =========================================================================
-   TOP NAVIGATION BAR
+   TOP NAVIGATION BAR (CRISP WHITE & BLUE)
    ========================================================================= */
 .cine-navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.85rem 1.75rem;
-    background: rgba(14, 19, 31, 0.75);
+    background: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-glass);
+    border: 1px solid var(--border-light);
     border-radius: 20px;
     margin-bottom: 2rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    box-shadow: 0 4px 25px rgba(37, 99, 235, 0.08);
 }
 
 .cine-logo-container {
@@ -74,13 +77,13 @@ html, body, [class*="css"], .stApp {
 .cine-logo-icon {
     width: 38px;
     height: 38px;
-    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+    background: var(--primary-gradient);
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.25rem;
-    box-shadow: 0 4px 15px var(--primary-glow);
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
 }
 
 .cine-logo-text {
@@ -88,22 +91,24 @@ html, body, [class*="css"], .stApp {
     font-size: 1.5rem;
     font-weight: 800;
     letter-spacing: -0.03em;
-    background: linear-gradient(135deg, #ffffff 30%, #cbd5e1 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--text-primary);
+}
+
+.cine-logo-text span {
+    color: var(--primary-blue);
 }
 
 .cine-badge-live {
     display: flex;
     align-items: center;
     gap: 6px;
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.75rem;
-    font-weight: 600;
-    color: #34d399;
+    font-weight: 700;
+    color: #059669;
 }
 
 .cine-pulse-dot {
@@ -111,7 +116,7 @@ html, body, [class*="css"], .stApp {
     height: 8px;
     background: #10b981;
     border-radius: 50%;
-    box-shadow: 0 0 10px #10b981;
+    box-shadow: 0 0 8px #10b981;
     animation: pulse 2s infinite;
 }
 
@@ -122,7 +127,7 @@ html, body, [class*="css"], .stApp {
 }
 
 /* =========================================================================
-   CINEMATIC SPOTLIGHT HERO
+   SPOTLIGHT HERO (DEEP ROYAL SAPPHIRE & WHITE)
    ========================================================================= */
 .spotlight-hero {
     position: relative;
@@ -130,23 +135,24 @@ html, body, [class*="css"], .stApp {
     overflow: hidden;
     padding: 3.5rem 3rem;
     margin-bottom: 2.5rem;
-    background: linear-gradient(135deg, rgba(30, 27, 75, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%);
-    border: 1px solid rgba(139, 92, 246, 0.25);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(16px);
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #2563eb 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 45px -10px rgba(30, 58, 138, 0.35);
+    color: #ffffff;
 }
 
 .spotlight-hero::before {
     content: "";
     position: absolute;
     top: 0; right: 0; bottom: 0; left: 0;
-    background: radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 60%);
+    background: radial-gradient(circle at 85% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
     pointer-events: none;
 }
 
 .spotlight-tag {
     display: inline-block;
-    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: #ffffff;
     font-size: 0.75rem;
     font-weight: 700;
@@ -155,6 +161,7 @@ html, body, [class*="css"], .stApp {
     padding: 4px 14px;
     border-radius: 30px;
     margin-bottom: 1rem;
+    backdrop-filter: blur(8px);
 }
 
 .spotlight-title {
@@ -164,14 +171,12 @@ html, body, [class*="css"], .stApp {
     line-height: 1.1;
     letter-spacing: -0.03em;
     margin-bottom: 1rem;
-    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 50%, #94a3b8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #ffffff;
 }
 
 .spotlight-desc {
     font-size: 1.15rem;
-    color: #cbd5e1;
+    color: #e0e7ff;
     max-width: 750px;
     line-height: 1.6;
     margin-bottom: 1.75rem;
@@ -180,7 +185,7 @@ html, body, [class*="css"], .stApp {
 .spotlight-stats-row {
     display: flex;
     gap: 2.5rem;
-    border-top: 1px solid var(--border-glass);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
     padding-top: 1.5rem;
 }
 
@@ -190,27 +195,27 @@ html, body, [class*="css"], .stApp {
 }
 
 .spotlight-stat-num {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 800;
-    color: #f8fafc;
+    color: #ffffff;
     letter-spacing: -0.02em;
 }
 
 .spotlight-stat-lbl {
     font-size: 0.75rem;
     font-weight: 600;
-    color: #94a3b8;
+    color: #bfdbfe;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
 /* =========================================================================
-   LUXURY MOVIE CARDS
+   LUXURY BLUE & WHITE MOVIE CARDS
    ========================================================================= */
 .cine-card {
     position: relative;
-    background: var(--bg-card);
-    border: 1px solid var(--border-glass);
+    background: #ffffff;
+    border: 1px solid var(--border-light);
     border-radius: 18px;
     padding: 0.75rem;
     height: 100%;
@@ -218,15 +223,14 @@ html, body, [class*="css"], .stApp {
     flex-direction: column;
     justify-content: space-between;
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(12px);
+    box-shadow: var(--card-shadow);
     overflow: hidden;
 }
 
 .cine-card:hover {
     transform: translateY(-8px) scale(1.02);
-    border-color: rgba(139, 92, 246, 0.4);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(139, 92, 246, 0.25);
+    border-color: var(--border-blue);
+    box-shadow: var(--card-hover-shadow);
 }
 
 .cine-poster-wrap {
@@ -235,7 +239,7 @@ html, body, [class*="css"], .stApp {
     aspect-ratio: 2 / 3;
     border-radius: 12px;
     overflow: hidden;
-    background: #131b2e;
+    background: #e2e8f0;
     margin-bottom: 0.85rem;
 }
 
@@ -256,9 +260,9 @@ html, body, [class*="css"], .stApp {
     position: absolute;
     top: 10px;
     left: 10px;
-    background: rgba(7, 9, 14, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #f8fafc;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
     font-size: 0.75rem;
     font-weight: 800;
     padding: 3px 9px;
@@ -270,32 +274,32 @@ html, body, [class*="css"], .stApp {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: var(--primary-gradient);
     color: #ffffff;
     font-size: 0.75rem;
     font-weight: 800;
     padding: 3px 9px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
 }
 
 .cine-badge-score {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
     color: #ffffff;
     font-size: 0.75rem;
     font-weight: 800;
     padding: 3px 9px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px var(--primary-glow);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
 }
 
 .cine-movie-title {
     font-size: 1.05rem;
     font-weight: 700;
-    color: #f8fafc;
+    color: var(--text-primary);
     margin-bottom: 0.35rem;
     line-height: 1.3;
     display: -webkit-box;
@@ -310,12 +314,12 @@ html, body, [class*="css"], .stApp {
     align-items: center;
     justify-content: space-between;
     font-size: 0.82rem;
-    color: #94a3b8;
+    color: var(--text-muted);
     margin-bottom: 0.65rem;
 }
 
 .cine-rating-gold {
-    color: #f59e0b;
+    color: #d97706;
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -324,12 +328,12 @@ html, body, [class*="css"], .stApp {
 
 .cine-genre-chip {
     display: inline-block;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    color: #cbd5e1;
+    background: var(--accent-ice);
+    border: 1px solid var(--border-blue);
+    color: #1d4ed8;
     font-size: 0.7rem;
     font-weight: 600;
-    padding: 2px 7px;
+    padding: 2px 8px;
     border-radius: 6px;
     margin-right: 4px;
     margin-bottom: 4px;
@@ -340,93 +344,87 @@ html, body, [class*="css"], .stApp {
    EXPLAINABILITY CARD
    ========================================================================= */
 .cine-explain-box {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.12) 0%, rgba(236, 72, 153, 0.06) 100%);
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
     border-radius: 12px;
     padding: 0.85rem;
     margin-top: 0.5rem;
     font-size: 0.8rem;
     line-height: 1.45;
-    color: #e2e8f0;
-}
-
-.cine-explain-tag {
-    display: inline-block;
-    background: rgba(139, 92, 246, 0.2);
-    border: 1px solid rgba(139, 92, 246, 0.4);
-    color: #c084fc;
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-right: 4px;
-    margin-bottom: 3px;
+    color: #166534;
 }
 
 /* =========================================================================
-   STREAMLIT FORM WIDGET OVERRIDES (SLIDERS, BUTTONS, SELECTBOXES)
+   STREAMLIT FORM WIDGETS OVERRIDES (BLUE & WHITE)
    ========================================================================= */
 .stButton > button {
-    background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 50%, #ec4899 100%) !important;
+    background: var(--primary-gradient) !important;
     color: #ffffff !important;
     font-weight: 700 !important;
     font-size: 0.95rem !important;
     border: none !important;
     border-radius: 14px !important;
     padding: 0.65rem 1.75rem !important;
-    box-shadow: 0 4px 20px var(--primary-glow) !important;
+    box-shadow: 0 4px 18px rgba(37, 99, 235, 0.3) !important;
     transition: all 0.3s ease !important;
 }
 
 .stButton > button:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 8px 30px rgba(217, 70, 239, 0.45) !important;
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.45) !important;
 }
 
-/* Custom Selectbox & Inputs */
+/* Inputs & Selectboxes */
 div[data-baseweb="select"] > div {
-    background-color: rgba(18, 24, 38, 0.85) !important;
-    border: 1px solid var(--border-glass) !important;
+    background-color: #ffffff !important;
+    border: 1px solid var(--border-light) !important;
     border-radius: 12px !important;
-    color: #f8fafc !important;
+    color: var(--text-primary) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
 
 div[data-baseweb="select"] > div:hover {
-    border-color: rgba(139, 92, 246, 0.5) !important;
+    border-color: var(--primary-blue) !important;
 }
 
 .stTextInput > div > div > input, .stTextArea > div > div > textarea {
-    background-color: rgba(18, 24, 38, 0.85) !important;
-    border: 1px solid var(--border-glass) !important;
+    background-color: #ffffff !important;
+    border: 1px solid var(--border-light) !important;
     border-radius: 12px !important;
-    color: #f8fafc !important;
+    color: var(--text-primary) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Sliders */
-.stSlider [data-baseweb="slider"] {
-    margin-top: 0.5rem !important;
+.stTextInput > div > div > input:focus, .stTextArea > div > div > textarea:focus {
+    border-color: var(--primary-blue) !important;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
 }
 
-/* Radio / Tabs Navigation Bar */
+/* Radio Navigation Bar */
 div[data-testid="stRadio"] > div {
-    background: rgba(18, 24, 38, 0.6);
-    border: 1px solid var(--border-glass);
+    background: #ffffff;
+    border: 1px solid var(--border-light);
     padding: 6px;
     border-radius: 16px;
-    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
 }
 
 div[data-testid="stRadio"] label {
     padding: 6px 14px;
     border-radius: 10px;
     font-weight: 600;
+    color: var(--text-secondary);
     transition: all 0.2s ease;
+}
+
+div[data-testid="stRadio"] label:hover {
+    color: var(--primary-blue);
 }
 
 /* Sidebar styling */
 section[data-testid="stSidebar"] {
-    background-color: #0b0f19 !important;
-    border-right: 1px solid var(--border-glass) !important;
+    background-color: #ffffff !important;
+    border-right: 1px solid var(--border-light) !important;
 }
 </style>
 """

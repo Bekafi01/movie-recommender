@@ -29,7 +29,7 @@ def render_navbar() -> None:
         <div class="cine-navbar">
             <div class="cine-logo-container">
                 <div class="cine-logo-icon">🎬</div>
-                <div class="cine-logo-text">CINEFLOW <span style="color: #8b5cf6;">AI</span></div>
+                <div class="cine-logo-text">CINEFLOW <span style="color: #2563eb;">AI</span></div>
             </div>
             <div style="display: flex; align-items: center; gap: 1rem;">
                 <div class="cine-badge-live">
@@ -155,7 +155,7 @@ def render_movie_grid(
                         )
                         st.markdown(
                             f"<div class='cine-explain-box'>"
-                            f"<strong style='color: #a855f7;'>{explanation['match_percentage']} Thematic Match</strong><br>"
+                            f"<strong style='color: #1d4ed8;'>{explanation['match_percentage']} Thematic Match</strong><br>"
                             f"{explanation['summary']}"
                             f"</div>",
                             unsafe_allow_html=True,
