@@ -93,7 +93,7 @@ $$WR = \left(\frac{v}{v+m}\right) R + \left(\frac{m}{v+m}\right) C$$
 
 ### 2. Dense Semantic Vector Search (Sentence-Transformers + FAISS)
 Embeds rich multi-modal textual metadata (title, overview, director, cast, keywords, genres) into a **384-dimensional unit hypersphere** using `all-MiniLM-L6-v2`:
-$$\operatorname{Sim}_{\text{semantic}}(q, d) = \langle \vec{e}_q, \vec{e}_d \rangle = \cos(\vec{e}_q, \vec{e}_d)$$
+$$\text{Sim}_{\text{semantic}}(q, d) = \langle \vec{e}_q, \vec{e}_d \rangle = \cos(\vec{e}_q, \vec{e}_d)$$
 Retrieved in **$< 3\text{ ms}$** via `faiss.IndexFlatIP`. Total artifact footprint is strictly **13.3 MB**, enabling zero-OOM serverless deployments.
 
 ---
@@ -116,7 +116,7 @@ $$\hat{y}_{ui} = \sigma\left( \mathbf{h}^T \left[ \phi^{\text{GMF}}(u, i) \,\|\,
 
 ### 5. Two-Stage Hybrid Re-Ranker with MMR Diversity
 Balances recommendation accuracy with catalog diversity and serendipity using **Maximal Marginal Relevance (MMR)**:
-$$\text{MMR}(u) = \operatorname{argmax}_{d_i \in R \setminus S} \left[ \lambda \cdot \operatorname{Sim}_1(u, d_i) - (1 - \lambda) \max_{d_j \in S} \operatorname{Sim}_2(d_i, d_j) \right]$$
+$$\text{MMR}(u) = \arg\max_{d_i \in R \setminus S} \left[ \lambda \cdot \text{Sim}_1(u, d_i) - (1 - \lambda) \max_{d_j \in S} \text{Sim}_2(d_i, d_j) \right]$$
 - $\lambda = 1.0$: Pure relevance maximization.
 - $\lambda = 0.5$: Equal balance between relevance and multi-genre diversity.
 - $\lambda = 0.0$: Maximum diversity / anti-clustering.
