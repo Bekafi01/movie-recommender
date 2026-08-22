@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # Service 1: FastAPI High-Performance Inference Microservice
+  recsys-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cineflow-recsys-api
+    command: ["python", "main.py", "serve", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "8000:8000"
+    environment:
+      - TMDB_API_KEY=${TMDB_API_KEY}
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./data:/app/data
+      - ./artifacts:/app/artifacts
+      - ./configs:/app/configs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # Service 2: Streamlit Cinema Experience UI
+  recsys-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cineflow-recsys-ui
+    command: ["python", "main.py", "ui", "--port", "8501"]
+    ports:
+      - "8501:8501"
+    environment:
+      - TMDB_API_KEY=${TMDB_API_KEY}
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./data:/app/data
+      - ./artifacts:/app/artifacts
+      - ./configs:/app/configs
+    depends_on:
+      - recsys-api
+    restart: unless-stopped
