@@ -67,6 +67,7 @@ class HybridRecommender(BaseRecommender):
         favorite_movie_ids: list[int] | None = None,
         top_k: int = 10,
         apply_mmr: bool = True,
+        exclude_item_ids: set[int] | None = None,
         **kwargs: Any,
     ) -> pd.DataFrame:
         """Generate hybrid recommendations for existing users, guest taste profiles, or single movie queries."""
@@ -75,7 +76,9 @@ class HybridRecommender(BaseRecommender):
 
         # Case 1: Existing User with User ID
         if user_id is not None and user_id in self.collab_model.user_to_idx:
-            return self._recommend_for_user(user_id=user_id, top_k=top_k, apply_mmr=apply_mmr)
+            return self._recommend_for_user(
+                user_id=user_id, top_k=top_k, apply_mmr=apply_mmr, exclude_item_ids=exclude_item_ids
+            )
 
         # Case 2: Guest User with Selected Favorite Movies (Taste Profile)
         if favorite_movie_ids and len(favorite_movie_ids) > 0:
@@ -90,13 +93,22 @@ class HybridRecommender(BaseRecommender):
         # Case 4: Completely Cold User -> Fallback to Popularity
         return self.popularity_model.recommend(top_k=top_k)
 
-    def _recommend_for_user(self, user_id: int, top_k: int, apply_mmr: bool) -> pd.DataFrame:
+    def _recommend_for_user(
+        self,
+        user_id: int,
+        top_k: int,
+        apply_mmr: bool,
+        exclude_item_ids: set[int] | None = None,
+    ) -> pd.DataFrame:
         """Blend Collaborative Filtering predictions with Content similarity from user's favorite movies."""
         candidate_pool_size = self.hybrid_cfg.candidate_pool_size
 
         # 1. Fetch top candidates from collaborative model
         collab_candidates = self.collab_model.recommend(
-            query=user_id, top_k=candidate_pool_size, exclude_rated=True
+            query=user_id,
+            top_k=candidate_pool_size,
+            exclude_rated=exclude_item_ids is None,
+            exclude_item_ids=exclude_item_ids,
         )
         if collab_candidates.empty:
             return self.popularity_model.recommend(top_k=top_k)

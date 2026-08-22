@@ -12,6 +12,7 @@ from rich.table import Table
 
 from recsys.data.db import DataRepository
 from recsys.data.pipeline import run_data_pipeline
+from recsys.evaluation.benchmark import run_benchmark_suite
 from recsys.models.hybrid import HybridRecommender
 from recsys.models.trainer import train_all_models
 
@@ -28,10 +29,12 @@ app = typer.Typer(
 data_app = typer.Typer(help="Data ingestion and preprocessing commands")
 train_app = typer.Typer(help="Model training commands")
 rec_app = typer.Typer(help="Inference and recommendation commands")
+eval_app = typer.Typer(help="Offline evaluation and benchmarking commands")
 
 app.add_typer(data_app, name="data")
 app.add_typer(train_app, name="train")
 app.add_typer(rec_app, name="recommend")
+app.add_typer(eval_app, name="eval")
 
 console = Console(highlight=False)
 
@@ -191,6 +194,56 @@ def recommend_user(
         console.print(table)
     except Exception as e:
         console.print(f"[bold red]Recommendation failed: {e}[/bold red]")
+        raise typer.Exit(code=1) from e
+
+
+@eval_app.command("benchmark")
+def evaluate_benchmark(
+    k: int = typer.Option(10, "--top-k", "-k", help="Top-K cutoff for summary metrics"),
+) -> None:
+    """Execute scientific offline benchmark comparing all models on ranking and diversity."""
+    console.print(
+        Panel("[bold green]Executing Offline Scientific Benchmark[/bold green]", expand=False)
+    )
+    try:
+        results_df = run_benchmark_suite(top_k=[5, k, 20])
+        summary = results_df[results_df["top_k"] == k].copy()
+
+        table = Table(
+            title=f"Offline Scientific Evaluation Summary (Top-{k})",
+            show_header=True,
+            header_style="bold magenta",
+        )
+        table.add_column("Model Engine", style="bold cyan")
+        table.add_column(f"NDCG@{k}", style="green")
+        table.add_column(f"MAP@{k}", style="green")
+        table.add_column(f"Recall@{k}", style="yellow")
+        table.add_column(f"Precision@{k}", style="yellow")
+        table.add_column(f"Hit Rate@{k}", style="cyan")
+        table.add_column(f"MRR@{k}", style="cyan")
+        table.add_column("Coverage", style="magenta")
+        table.add_column("Novelty", style="blue")
+        table.add_column("Diversity", style="white")
+
+        for _, r in summary.iterrows():
+            table.add_row(
+                str(r["model"]),
+                f"{r['ndcg@k']:.4f}",
+                f"{r['map@k']:.4f}",
+                f"{r['recall@k']:.4f}",
+                f"{r['precision@k']:.4f}",
+                f"{r['hit_rate@k']:.4f}",
+                f"{r['mrr@k']:.4f}",
+                f"{r['coverage']:.2%}",
+                f"{r['novelty']:.2f}",
+                f"{r['diversity']:.4f}",
+            )
+        console.print(table)
+        console.print(
+            "[bold green][OK] Benchmark completed! Reports saved to artifacts/benchmarks/[/bold green]"
+        )
+    except Exception as e:
+        console.print(f"[bold red]Benchmark failed: {e}[/bold red]")
         raise typer.Exit(code=1) from e
 
 

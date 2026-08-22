@@ -103,6 +103,7 @@ class SVDCollaborativeRecommender(BaseRecommender):
         query: int,
         top_k: int = 10,
         exclude_rated: bool = True,
+        exclude_item_ids: set[int] | None = None,
         **kwargs: Any,
     ) -> pd.DataFrame:
         """Recommend Top-K predicted movies for a given user_id."""
@@ -116,8 +117,12 @@ class SVDCollaborativeRecommender(BaseRecommender):
         u_idx = self.user_to_idx[user_id]
         user_predictions = self.predicted_matrix[u_idx].copy()
 
-        # Mask already rated movies if requested
-        if exclude_rated and user_id in self.user_rated_items:
+        # Mask movies to exclude (either custom set or all rated)
+        if exclude_item_ids is not None:
+            for item_id in exclude_item_ids:
+                if item_id in self.movie_to_idx:
+                    user_predictions[self.movie_to_idx[item_id]] = -999.0
+        elif exclude_rated and user_id in self.user_rated_items:
             for rated_movie_id in self.user_rated_items[user_id]:
                 if rated_movie_id in self.movie_to_idx:
                     user_predictions[self.movie_to_idx[rated_movie_id]] = -999.0

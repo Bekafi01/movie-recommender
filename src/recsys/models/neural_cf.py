@@ -185,6 +185,7 @@ class NeuralCollaborativeRecommender(BaseRecommender):
         query: int,
         top_k: int = 10,
         exclude_rated: bool = True,
+        exclude_item_ids: set[int] | None = None,
         **kwargs: Any,
     ) -> pd.DataFrame:
         """Score candidate movies for a user and return Top-K recommendations."""
@@ -204,8 +205,12 @@ class NeuralCollaborativeRecommender(BaseRecommender):
             logits = self.model(u_tensor, all_item_indices)
             scores = torch.sigmoid(logits).cpu().numpy()
 
-        # Mask seen items
-        if exclude_rated and user_id in self.user_rated_items:
+        # Mask excluded items (custom set or all rated)
+        if exclude_item_ids is not None:
+            for item_id in exclude_item_ids:
+                if item_id in self.movie_to_idx:
+                    scores[self.movie_to_idx[item_id]] = -1.0
+        elif exclude_rated and user_id in self.user_rated_items:
             for rated_m in self.user_rated_items[user_id]:
                 if rated_m in self.movie_to_idx:
                     scores[self.movie_to_idx[rated_m]] = -1.0
