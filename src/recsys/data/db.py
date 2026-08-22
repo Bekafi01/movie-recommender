@@ -128,3 +128,21 @@ class DataRepository:
             )
             rows = cursor.fetchall()
             return [dict(row) for row in rows]
+
+    def get_movie_by_id(self, movie_id: int) -> dict[str, Any] | None:
+        """Fetch movie metadata by movie_id."""
+        sqlite_path = self.config.get_processed_file_path("movies_sqlite")
+        if sqlite_path.exists():
+            with sqlite3.connect(sqlite_path) as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM movies WHERE movie_id = ? LIMIT 1", (movie_id,))
+                row = cursor.fetchone()
+                if row:
+                    return dict(row)
+
+        df = self.load_movies()
+        match = df[df["movie_id"] == movie_id]
+        if not match.empty:
+            return match.iloc[0].to_dict()
+        return None

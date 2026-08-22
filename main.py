@@ -247,5 +247,24 @@ def evaluate_benchmark(
         raise typer.Exit(code=1) from e
 
 
+@app.command("serve")
+def serve_api(
+    host: str = typer.Option("127.0.0.1", "--host", "-h", help="API host interface"),
+    port: int = typer.Option(8000, "--port", "-p", help="API server port"),
+    reload: bool = typer.Option(False, "--reload", help="Enable auto-reload for development"),
+) -> None:
+    """Launch the FastAPI production inference microservice with Uvicorn."""
+    import uvicorn
+
+    console.print(
+        Panel(
+            f"[bold green]Starting RecSys FastAPI Server on http://{host}:{port}[/bold green]\n"
+            f"[dim]Interactive Swagger UI: http://{host}:{port}/docs[/dim]",
+            expand=False,
+        )
+    )
+    uvicorn.run("recsys.serving.api:app", host=host, port=port, reload=reload)
+
+
 if __name__ == "__main__":
     app()
