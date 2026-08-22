@@ -97,6 +97,31 @@ def search_movie(query: str = typer.Argument(..., help="Title substring to searc
         raise typer.Exit(code=1) from e
 
 
+@data_app.command("fetch-posters")
+def fetch_posters(
+    limit: int = typer.Option(100, "--limit", "-n", help="Number of movies to enrich (0 for all)"),
+    workers: int = typer.Option(8, "--workers", "-w", help="Concurrent worker threads"),
+) -> None:
+    """Pre-fetch and cache authentic theatrical posters via official TMDB API v3."""
+    from recsys.config import load_config
+    from recsys.data.poster_fetcher import PosterResolver
+
+    cfg = load_config()
+    repo = DataRepository(config=cfg)
+    movies_df = repo.load_movies()
+    if limit > 0:
+        movies_df = movies_df.head(limit)
+
+    console.print(
+        f"[bold cyan]Fetching posters for {len(movies_df)} movies via official TMDB API v3...[/bold cyan]"
+    )
+    resolver = PosterResolver()
+    results = resolver.bulk_enrich(movies_df.to_dict(orient="records"), max_workers=workers)
+    console.print(
+        f"[bold green][OK] Successfully enriched and cached {len(results)} movie posters![/bold green]"
+    )
+
+
 @train_app.command("all")
 def train_all(
     skip_neural: bool = typer.Option(

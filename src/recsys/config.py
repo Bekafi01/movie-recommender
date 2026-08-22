@@ -76,6 +76,7 @@ class ProcessedFilesSettings(BaseModel):
 class TMDBClientSettings(BaseModel):
     image_base_url: str = "https://image.tmdb.org/t/p/w500"
     api_base_url: str = "https://api.themoviedb.org/3"
+    api_key: str | None = None
 
 
 class PopularityModelSettings(BaseModel):

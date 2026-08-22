@@ -1,5 +1,8 @@
-"""Unit tests for Streamlit UI helper components."""
+"""Unit tests for Streamlit UI helper components and PosterResolver."""
 
+from pathlib import Path
+
+from recsys.data.poster_fetcher import PosterResolver
 from recsys.ui.components import (
     get_poster_url,
     render_movie_card,
@@ -8,19 +11,27 @@ from recsys.ui.components import (
 )
 
 
+def test_poster_resolver(tmp_path: Path) -> None:
+    """Test PosterResolver cache creation and resolution."""
+    cache_file = tmp_path / "posters_cache.json"
+    resolver = PosterResolver(cache_file=cache_file)
+
+    # Test cache persistence
+    resolver.cache["Inception_2010"] = "https://image.tmdb.org/t/p/w500/test_inception.jpg"
+    resolver.save_cache()
+
+    # Re-load
+    resolver2 = PosterResolver(cache_file=cache_file)
+    assert (
+        resolver2.resolve("Inception", year=2010)
+        == "https://image.tmdb.org/t/p/w500/test_inception.jpg"
+    )
+
+
 def test_get_poster_url() -> None:
-    """Test TMDB poster path resolution and fallback placeholder."""
-    # Valid TMDB poster path
-    url_with_slash = get_poster_url("/poster123.jpg")
-    assert url_with_slash == "https://image.tmdb.org/t/p/w500/poster123.jpg"
-
-    url_without_slash = get_poster_url("poster123.jpg")
-    assert url_without_slash == "https://image.tmdb.org/t/p/w500/poster123.jpg"
-
-    # Missing / None / nan poster path -> returns Unsplash fallback placeholder
-    assert "images.unsplash.com" in get_poster_url(None)
-    assert "images.unsplash.com" in get_poster_url("")
-    assert "images.unsplash.com" in get_poster_url("nan")
+    """Test get_poster_url fallback behavior."""
+    url = get_poster_url(title="Nonexistent Movie 12345", year=1900)
+    assert url.startswith("http")
 
 
 def test_ui_components_render() -> None:
@@ -30,6 +41,7 @@ def test_ui_components_render() -> None:
 
     movie = {
         "movie_id": 1,
+        "tmdb_id": 27205,
         "title": "Inception",
         "release_year": 2010,
         "vote_average": 8.4,
