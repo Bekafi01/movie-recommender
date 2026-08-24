@@ -28,22 +28,28 @@ def client() -> Generator[TestClient, None, None]:
             cfg = load_config()
             movies_df = pd.DataFrame(
                 {
-                    "movie_id": [1, 2, 296, 356, 5],
-                    "tmdb_id": [101, 102, 103, 104, 105],
+                    "movie_id": [1, 2, 296, 356, 5, 6, 7, 8],
+                    "tmdb_id": [101, 102, 103, 104, 105, 106, 107, 108],
                     "title": [
                         "Inception",
                         "Interstellar",
                         "Pulp Fiction",
                         "Forrest Gump",
                         "The Matrix",
+                        "Gladiator",
+                        "The Dark Knight",
+                        "Fight Club",
                     ],
-                    "release_year": [2010, 2014, 1994, 1994, 1999],
+                    "release_year": [2010, 2014, 1994, 1994, 1999, 2000, 2008, 1999],
                     "genres_list": [
                         ["action", "sci-fi"],
                         ["drama", "sci-fi"],
                         ["crime", "drama"],
                         ["drama", "romance"],
                         ["action", "sci-fi"],
+                        ["action", "drama"],
+                        ["action", "crime"],
+                        ["drama"],
                     ],
                     "genres_str": [
                         "action sci-fi",
@@ -51,6 +57,9 @@ def client() -> Generator[TestClient, None, None]:
                         "crime drama",
                         "drama romance",
                         "action sci-fi",
+                        "action drama",
+                        "action crime",
+                        "drama",
                     ],
                     "directors_list": [
                         ["christopher_nolan"],
@@ -58,6 +67,9 @@ def client() -> Generator[TestClient, None, None]:
                         ["quentin_tarantino"],
                         ["robert_zemeckis"],
                         ["wachowskis"],
+                        ["ridley_scott"],
+                        ["christopher_nolan"],
+                        ["david_fincher"],
                     ],
                     "director_str": [
                         "christopher_nolan",
@@ -65,6 +77,9 @@ def client() -> Generator[TestClient, None, None]:
                         "quentin_tarantino",
                         "robert_zemeckis",
                         "wachowskis",
+                        "ridley_scott",
+                        "christopher_nolan",
+                        "david_fincher",
                     ],
                     "cast_list": [
                         ["leonardo_dicaprio"],
@@ -72,6 +87,9 @@ def client() -> Generator[TestClient, None, None]:
                         ["john_travolta"],
                         ["tom_hanks"],
                         ["keanu_reeves"],
+                        ["russell_crowe"],
+                        ["christian_bale"],
+                        ["brad_pitt"],
                     ],
                     "cast_str": [
                         "leonardo_dicaprio",
@@ -79,41 +97,68 @@ def client() -> Generator[TestClient, None, None]:
                         "john_travolta",
                         "tom_hanks",
                         "keanu_reeves",
+                        "russell_crowe",
+                        "christian_bale",
+                        "brad_pitt",
                     ],
-                    "keywords_list": [["dream"], ["space"], ["crime"], ["life"], ["matrix"]],
-                    "keywords_str": ["dream", "space", "crime", "life", "matrix"],
-                    "vote_average": [8.4, 8.6, 8.9, 8.8, 8.7],
-                    "vote_count": [20000, 18000, 22000, 21000, 19000],
-                    "popularity": [45.0, 42.0, 50.0, 48.0, 46.0],
-                    "weighted_rating": [8.3, 8.5, 8.8, 8.7, 8.6],
+                    "keywords_list": [
+                        ["dream"],
+                        ["space"],
+                        ["crime"],
+                        ["life"],
+                        ["matrix"],
+                        ["rome"],
+                        ["batman"],
+                        ["fight"],
+                    ],
+                    "keywords_str": [
+                        "dream",
+                        "space",
+                        "crime",
+                        "life",
+                        "matrix",
+                        "rome",
+                        "batman",
+                        "fight",
+                    ],
+                    "vote_average": [8.4, 8.6, 8.9, 8.8, 8.7, 8.5, 9.0, 8.8],
+                    "vote_count": [20000, 18000, 22000, 21000, 19000, 17000, 25000, 21000],
+                    "popularity": [45.0, 42.0, 50.0, 48.0, 46.0, 41.0, 55.0, 49.0],
+                    "weighted_rating": [8.3, 8.5, 8.8, 8.7, 8.6, 8.4, 8.9, 8.7],
                     "poster_path": [
                         "/path1.jpg",
                         "/path2.jpg",
                         "/path3.jpg",
                         "/path4.jpg",
                         "/path5.jpg",
+                        "/path6.jpg",
+                        "/path7.jpg",
+                        "/path8.jpg",
                     ],
                 }
             )
             ratings_df = pd.DataFrame(
                 {
-                    "user_id": [1, 1, 1, 2, 2],
-                    "movie_id": [1, 2, 296, 356, 5],
-                    "rating": [5.0, 4.5, 4.0, 5.0, 4.0],
-                    "timestamp": [1000, 2000, 3000, 4000, 5000],
+                    "user_id": [1, 1, 1, 1, 2, 2, 2, 2],
+                    "movie_id": [1, 2, 296, 356, 5, 6, 7, 8],
+                    "rating": [5.0, 4.5, 4.0, 4.5, 5.0, 4.0, 5.0, 4.5],
+                    "timestamp": [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000],
                 }
             )
 
             soup_df = pd.DataFrame(
                 {
-                    "movie_id": [1, 2, 296, 356, 5],
-                    "tmdb_id": [101, 102, 103, 104, 105],
+                    "movie_id": [1, 2, 296, 356, 5, 6, 7, 8],
+                    "tmdb_id": [101, 102, 103, 104, 105, 106, 107, 108],
                     "title": [
                         "Inception",
                         "Interstellar",
                         "Pulp Fiction",
                         "Forrest Gump",
                         "The Matrix",
+                        "Gladiator",
+                        "The Dark Knight",
+                        "Fight Club",
                     ],
                     "soup": [
                         "inception dream christopher_nolan leonardo_dicaprio action sci-fi",
@@ -121,6 +166,9 @@ def client() -> Generator[TestClient, None, None]:
                         "pulp_fiction crime quentin_tarantino john_travolta crime drama",
                         "forrest_gump life robert_zemeckis tom_hanks drama romance",
                         "the_matrix matrix wachowskis keanu_reeves action sci-fi virtual reality",
+                        "gladiator rome ridley_scott russell_crowe action drama",
+                        "the_dark_knight batman christopher_nolan christian_bale action crime",
+                        "fight_club fight david_fincher brad_pitt drama",
                     ],
                 }
             )
