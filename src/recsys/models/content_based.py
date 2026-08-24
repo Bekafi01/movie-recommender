@@ -178,13 +178,9 @@ class SemanticVectorRecommender(BaseRecommender):
             self.pipeline.embeddings = self.embeddings
 
         if not self.title_to_idx and not self.movies_df.empty and "title" in self.movies_df:
-            self.title_to_idx = {
-                str(t).lower(): i for i, t in enumerate(self.movies_df["title"])
-            }
+            self.title_to_idx = {str(t).lower(): i for i, t in enumerate(self.movies_df["title"])}
         if not self.id_to_idx and not self.movies_df.empty and "movie_id" in self.movies_df:
-            self.id_to_idx = {
-                int(m): i for i, m in enumerate(self.movies_df["movie_id"])
-            }
+            self.id_to_idx = {int(m): i for i, m in enumerate(self.movies_df["movie_id"])}
 
         if not self._fitted or self.pipeline.index is None:
             raise RuntimeError("SemanticVectorRecommender must be fitted before recommend().")
