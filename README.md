@@ -1,4 +1,4 @@
-# 🎬 CineFlow AI — Multi-Paradigm Movie Recommendation Engine
+# 🎬 CineFlow: Multi-Paradigm Movie Recommendation Engine
 
 <div align="center">
 
@@ -83,7 +83,11 @@ flowchart TD
 
 ### 1. IMDb Bayesian Weighted Rating ($WR$)
 Mitigates review-count bias for unpersonalized and cold-start recommendations:
-$$WR = \left(\frac{v}{v+m}\right) R + \left(\frac{m}{v+m}\right) C$$
+
+$$
+WR = \left(\frac{v}{v+m}\right) R + \left(\frac{m}{v+m}\right) C
+$$
+
 - $v$: Number of votes for the movie.
 - $m$: 80th percentile vote threshold cutoff.
 - $R$: Average vote rating of the movie.
@@ -93,21 +97,33 @@ $$WR = \left(\frac{v}{v+m}\right) R + \left(\frac{m}{v+m}\right) C$$
 
 ### 2. Dense Semantic Vector Search (Sentence-Transformers + FAISS)
 Embeds rich multi-modal textual metadata (title, overview, director, cast, keywords, genres) into a **384-dimensional unit hypersphere** using `all-MiniLM-L6-v2`:
-$$\text{Sim}_{\text{semantic}}(q, d) = \langle \vec{e}_q, \vec{e}_d \rangle = \cos(\vec{e}_q, \vec{e}_d)$$
+
+$$
+\text{Sim}_{\text{semantic}}(q, d) = \langle \vec{e}_q, \vec{e}_d \rangle = \cos(\vec{e}_q, \vec{e}_d)
+$$
+
 Retrieved in **$< 3\text{ ms}$** via `faiss.IndexFlatIP`. Total artifact footprint is strictly **13.3 MB**, enabling zero-OOM serverless deployments.
 
 ---
 
 ### 3. Collaborative Filtering SVD
 Decomposes the sparse user-item rating matrix $R \in \mathbb{R}^{|U| \times |I|}$ into rank-$k$ latent factors ($k=50$):
-$$\hat{R} = U \Sigma V^T \approx P \cdot Q^T$$
+
+$$
+\hat{R} = U \Sigma V^T \approx P \cdot Q^T
+$$
+
 Predicts unobserved user affinities $\hat{r}_{u,i} = \vec{p}_u \cdot \vec{q}_i^T$ with sub-millisecond dot product inference.
 
 ---
 
 ### 4. PyTorch Neural Collaborative Filtering (NeuMF)
 Combines linear matrix factorization (GMF) with non-linear deep neural representations (MLP):
-$$\hat{y}_{ui} = \sigma\left( \mathbf{h}^T \left[ \phi^{\text{GMF}}(u, i) \,\|\, \phi^{\text{MLP}}(u, i) \right] \right)$$
+
+$$
+\hat{y}_{ui} = \sigma\left( \mathbf{h}^T \left[ \phi^{\text{GMF}}(u, i) \,\|\, \phi^{\text{MLP}}(u, i) \right] \right)
+$$
+
 - **GMF Layer**: Element-wise product of latent vectors $\mathbf{p}_u^G \odot \mathbf{q}_i^G$.
 - **MLP Layer**: Dense feedforward network with ReLU, Dropout ($p=0.2$), and layer sizes $[64 \rightarrow 32 \rightarrow 16]$.
 - **Optimization**: Trained with `BCEWithLogitsLoss` using Adam ($lr=10^{-3}$) and $4\times$ negative sampling on positive interactions ($r \ge 3.5\star$).
@@ -116,7 +132,11 @@ $$\hat{y}_{ui} = \sigma\left( \mathbf{h}^T \left[ \phi^{\text{GMF}}(u, i) \,\|\,
 
 ### 5. Two-Stage Hybrid Re-Ranker with MMR Diversity
 Balances recommendation accuracy with catalog diversity and serendipity using **Maximal Marginal Relevance (MMR)**:
-$$\text{MMR}(u) = \arg\max_{d_i \in R \setminus S} \left[ \lambda \cdot \text{Sim}_1(u, d_i) - (1 - \lambda) \max_{d_j \in S} \text{Sim}_2(d_i, d_j) \right]$$
+
+$$
+\text{MMR}(u) = \underset{d_i \in R \setminus S}{\text{argmax}} \left[ \lambda \cdot \text{Sim}_1(u, d_i) - (1 - \lambda) \max_{d_j \in S} \text{Sim}_2(d_i, d_j) \right]
+$$
+
 - $\lambda = 1.0$: Pure relevance maximization.
 - $\lambda = 0.5$: Equal balance between relevance and multi-genre diversity.
 - $\lambda = 0.0$: Maximum diversity / anti-clustering.
