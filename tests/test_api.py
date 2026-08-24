@@ -104,10 +104,31 @@ def client() -> Generator[TestClient, None, None]:
                 }
             )
 
+            soup_df = pd.DataFrame(
+                {
+                    "movie_id": [1, 2, 296, 356, 5],
+                    "tmdb_id": [101, 102, 103, 104, 105],
+                    "title": [
+                        "Inception",
+                        "Interstellar",
+                        "Pulp Fiction",
+                        "Forrest Gump",
+                        "The Matrix",
+                    ],
+                    "soup": [
+                        "inception dream christopher_nolan leonardo_dicaprio action sci-fi",
+                        "interstellar space christopher_nolan matthew_mcconaughey drama sci-fi",
+                        "pulp_fiction crime quentin_tarantino john_travolta crime drama",
+                        "forrest_gump life robert_zemeckis tom_hanks drama romance",
+                        "the_matrix matrix wachowskis keanu_reeves action sci-fi virtual reality",
+                    ],
+                }
+            )
+
             state.catalog_size = len(movies_df)
             state.explainability = ExplainabilityEngine(movies_df=movies_df)
             state.popularity_model = PopularityRecommender(config=cfg).fit(movies_df)
-            state.tfidf_model = TFIDFRecommender(config=cfg).fit(movies_df)
+            state.tfidf_model = TFIDFRecommender(config=cfg).fit(movies_df, soup_df)
             state.svd_model = SVDCollaborativeRecommender(config=cfg).fit(ratings_df)
 
             # Synthetic embeddings for fast hermetic test

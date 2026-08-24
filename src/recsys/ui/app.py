@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import importlib
 from typing import Any
 
 import pandas as pd
 import streamlit as st
 
+import recsys.ui.components
 from recsys.config import load_config
 from recsys.data.db import DataRepository
 from recsys.models.collaborative import SVDCollaborativeRecommender
@@ -18,9 +20,12 @@ from recsys.models.popularity import PopularityRecommender
 from recsys.ui.components import render_movie_grid, render_navbar, render_spotlight_hero
 from recsys.ui.styles import CUSTOM_CSS
 
+# Ensure hot reloads in Streamlit always pick up latest component definitions
+importlib.reload(recsys.ui.components)
+
 # Page Configuration
 st.set_page_config(
-    page_title="CineFlow AI - Next-Gen Movie Recommender",
+    page_title="CineFlow: Next-Gen Movie Recommender",
     page_icon="🎬",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -234,7 +239,13 @@ def main() -> None:
                 st.markdown(
                     f"#### 🎯 Recommended For Your Taste ({len(selected_titles)} Movies Selected)"
                 )
-                render_movie_grid(movies=recs_df.to_dict(orient="records"), num_cols=5)
+                render_movie_grid(
+                    movies=recs_df.to_dict(orient="records"),
+                    num_cols=5,
+                    show_explain=True,
+                    explain_engine=explain_engine,
+                    source_movie_id=fav_ids[0] if fav_ids else None,
+                )
 
     # =========================================================================
     # TAB 3: PERSONALIZED USER FEED (User ID Deep Dive)
@@ -373,7 +384,13 @@ def main() -> None:
                 if semantic_model:
                     recs_df = semantic_model.recommend(query=query_text, top_k=top_k)
                     st.markdown("#### 🎯 Nearest Semantic Vector Matches")
-                    render_movie_grid(movies=recs_df.to_dict(orient="records"), num_cols=5)
+                    render_movie_grid(
+                        movies=recs_df.to_dict(orient="records"),
+                        num_cols=5,
+                        show_explain=True,
+                        explain_engine=explain_engine,
+                        query_text=query_text,
+                    )
 
 
 if __name__ == "__main__":

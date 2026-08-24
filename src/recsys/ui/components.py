@@ -137,6 +137,8 @@ def render_movie_grid(
     show_explain: bool = False,
     explain_engine: Any = None,
     source_movie_id: int | None = None,
+    query_text: str | None = None,
+    **kwargs: Any,
 ) -> None:
     """Render responsive grid of luxury movie cards with parallel pre-resolution for sub-100ms loading."""
     if not movies:
@@ -154,19 +156,30 @@ def render_movie_grid(
                 rank = movie_data.get("rank", i + row_movies.index(movie_data) + 1)
                 render_movie_card(movie_data, rank=rank)
 
-                if show_explain and explain_engine and source_movie_id:
-                    with st.expander("💡 Match Insights", expanded=False):
-                        rec_id = int(movie_data.get("movie_id", 0))
-                        sim = float(movie_data.get("score", 0.0))
+                if show_explain and explain_engine:
+                    rec_id = int(movie_data.get("movie_id", 0))
+                    sim = float(movie_data.get("score", 0.0))
+                    explanation = None
+
+                    if source_movie_id:
                         explanation = explain_engine.explain(
                             source_movie_id=source_movie_id,
                             recommended_movie_id=rec_id,
                             similarity_score=sim,
                         )
-                        explain_box = (
-                            '<div class="cine-explain-box">'
-                            f'<strong style="color: #1d4ed8;">{explanation["match_percentage"]} Thematic Match</strong><br>'
-                            f"{explanation['summary']}"
-                            "</div>"
+                    elif query_text and hasattr(explain_engine, "explain_query"):
+                        explanation = explain_engine.explain_query(
+                            query_text=query_text,
+                            recommended_movie_id=rec_id,
+                            similarity_score=sim,
                         )
-                        st.markdown(explain_box, unsafe_allow_html=True)
+
+                    if explanation:
+                        with st.expander("💡 Match Insights", expanded=False):
+                            explain_box = (
+                                '<div class="cine-explain-box">'
+                                f'<strong style="color: #1d4ed8;">{explanation["match_percentage"]} Match</strong><br>'
+                                f"{explanation['summary']}"
+                                "</div>"
+                            )
+                            st.markdown(explain_box, unsafe_allow_html=True)

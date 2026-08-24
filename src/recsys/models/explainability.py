@@ -81,5 +81,60 @@ class ExplainabilityEngine:
             "shared_directors": shared_directors,
             "shared_cast": shared_cast,
             "shared_genres": shared_genres,
-            "shared_keywords": shared_kws[:5],
+            "shared_keywords": shared_kws,
+        }
+
+    def explain_query(
+        self, query_text: str, recommended_movie_id: int, similarity_score: float = 0.0
+    ) -> dict[str, Any]:
+        """Generate human-readable explanation for why recommended_movie matched a free-text search prompt."""
+        rec = self.movies_df.get(recommended_movie_id, {})
+        if not rec:
+            return {
+                "recommended_id": recommended_movie_id,
+                "summary": "Matched high-dimensional semantic vector similarity.",
+                "similarity_score": round(similarity_score, 4),
+                "match_percentage": f"{max(0.0, min(1.0, similarity_score)) * 100:.1f}%",
+            }
+
+        q_tokens = set(query_text.lower().replace("-", " ").replace(",", " ").split())
+
+        # Check matched genres
+        rec_genres = set(rec.get("genres_list", []))
+        matched_genres = [
+            g.replace("_", " ").title()
+            for g in rec_genres
+            if any(t in g.lower() for t in q_tokens if len(t) > 2)
+        ]
+
+        # Check matched keywords
+        rec_kws = set(rec.get("keywords_list", []))
+        matched_kws = [
+            k.replace("_", " ").title()
+            for k in rec_kws
+            if any(t in k.lower() for t in q_tokens if len(t) > 3)
+        ]
+
+        reasons: list[str] = []
+        if matched_genres:
+            reasons.append(f"Genres: {', '.join(matched_genres)}")
+        if matched_kws:
+            reasons.append(f"Matching themes: {', '.join(matched_kws[:3])}")
+
+        if not reasons:
+            overview_snippet = rec.get("overview", "")[:120] + "..." if rec.get("overview") else ""
+            summary = (
+                f"Neural vector alignment: {overview_snippet}"
+                if overview_snippet
+                else "High semantic overlap in narrative vector space."
+            )
+        else:
+            summary = "Semantic alignment with search prompt: " + "; ".join(reasons) + "."
+
+        return {
+            "recommended_id": recommended_movie_id,
+            "recommended_title": rec.get("title", ""),
+            "similarity_score": round(similarity_score, 4),
+            "match_percentage": f"{max(0.0, min(1.0, similarity_score)) * 100:.1f}%",
+            "summary": summary,
         }
