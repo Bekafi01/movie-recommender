@@ -171,6 +171,21 @@ class SemanticVectorRecommender(BaseRecommender):
         **kwargs: Any,
     ) -> pd.DataFrame:
         """Recommend Top-K movies using FAISS vector search."""
+        # Bridge directly assigned index/embeddings if present
+        if self.pipeline.index is None and hasattr(self, "index"):
+            self.pipeline.index = self.index
+        if self.pipeline.embeddings is None and hasattr(self, "embeddings"):
+            self.pipeline.embeddings = self.embeddings
+
+        if not self.title_to_idx and not self.movies_df.empty and "title" in self.movies_df:
+            self.title_to_idx = {
+                str(t).lower(): i for i, t in enumerate(self.movies_df["title"])
+            }
+        if not self.id_to_idx and not self.movies_df.empty and "movie_id" in self.movies_df:
+            self.id_to_idx = {
+                int(m): i for i, m in enumerate(self.movies_df["movie_id"])
+            }
+
         if not self._fitted or self.pipeline.index is None:
             raise RuntimeError("SemanticVectorRecommender must be fitted before recommend().")
 

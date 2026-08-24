@@ -125,6 +125,9 @@ def client() -> Generator[TestClient, None, None]:
                 }
             )
 
+            # Persist mock database so repo queries work in clean CI environments
+            state.repo.save_clean_data(movies_df, ratings_df, soup_df)
+
             state.catalog_size = len(movies_df)
             state.explainability = ExplainabilityEngine(movies_df=movies_df)
             state.popularity_model = PopularityRecommender(config=cfg).fit(movies_df)
@@ -139,8 +142,10 @@ def client() -> Generator[TestClient, None, None]:
 
             sem = SemanticVectorRecommender(config=cfg)
             sem.movies_df = movies_df
-            sem.embeddings = emb
-            sem.index = idx
+            sem.title_to_idx = {str(t).lower(): i for i, t in enumerate(movies_df["title"])}
+            sem.id_to_idx = {int(mid): i for i, mid in enumerate(movies_df["movie_id"])}
+            sem.pipeline.embeddings = emb
+            sem.pipeline.index = idx
             sem.movie_id_to_idx = {int(mid): i for i, mid in enumerate(movies_df["movie_id"])}
             sem.idx_to_movie_id = {i: int(mid) for i, mid in enumerate(movies_df["movie_id"])}
             sem._fitted = True

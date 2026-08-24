@@ -192,11 +192,15 @@ async def health_check() -> HealthResponse:
 # --- Catalog Search ---
 @app.get("/api/v1/movies/search", response_model=list[MovieSummary], tags=["Catalog"])
 async def search_movies(
-    q: str = Query(..., min_length=1, description="Movie title substring to search"),
+    q: str | None = Query(None, description="Movie title substring to search"),
+    query: str | None = Query(None, description="Alternative query parameter name"),
     limit: int = Query(10, ge=1, le=50),
 ) -> list[MovieSummary]:
     """Search movies in the catalog by title substring."""
-    results = state.repo.search_movies(q, limit=limit)
+    search_term = q or query
+    if not search_term or not search_term.strip():
+        raise HTTPException(status_code=400, detail="Search query parameter 'q' is required.")
+    results = state.repo.search_movies(search_term.strip(), limit=limit)
     return [MovieSummary(**r) for r in results]
 
 
