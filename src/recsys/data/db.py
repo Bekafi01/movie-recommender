@@ -73,6 +73,9 @@ class DataRepository:
             "sqlite_db": sqlite_path,
         }
 
+    # Backward compatibility alias
+    save_clean_data = save_processed
+
     def load_movies(self) -> pd.DataFrame:
         """Load clean movies dataset from Parquet (or SQLite fallback)."""
         path = self.config.get_processed_file_path("movies_clean")

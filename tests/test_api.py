@@ -126,7 +126,7 @@ def client() -> Generator[TestClient, None, None]:
             )
 
             # Persist mock database so repo queries work in clean CI environments
-            state.repo.save_clean_data(movies_df, ratings_df, soup_df)
+            state.repo.save_processed(movies_df, ratings_df, soup_df)
 
             state.catalog_size = len(movies_df)
             state.explainability = ExplainabilityEngine(movies_df=movies_df)
