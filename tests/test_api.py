@@ -129,7 +129,7 @@ def client() -> Generator[TestClient, None, None]:
             state.explainability = ExplainabilityEngine(movies_df=movies_df)
             state.popularity_model = PopularityRecommender(config=cfg).fit(movies_df)
             state.tfidf_model = TFIDFRecommender(config=cfg).fit(movies_df, soup_df)
-            state.svd_model = SVDCollaborativeRecommender(config=cfg).fit(ratings_df)
+            state.svd_model = SVDCollaborativeRecommender(config=cfg).fit(ratings_df, movies_df)
 
             # Synthetic embeddings for fast hermetic test
             emb = np.random.randn(len(movies_df), 384).astype(np.float32)
