@@ -7,9 +7,10 @@
 [![FAISS](https://img.shields.io/badge/FAISS-Vector%20Search-0467DF?style=for-the-badge&logo=meta&logoColor=white)](https://github.com/facebookresearch/faiss)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.42+-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit%20Cloud-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://cineflow-movie-recommender.streamlit.app/)
 [![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![Ruff](https://img.shields.io/badge/Linter-Ruff-black?style=for-the-badge&logo=astral&logoColor=white)](https://github.com/astral-sh/ruff)
-[![Tests](https://img.shields.io/badge/Tests-49%2F49%20Passing%20(100%25)-brightgreen?style=for-the-badge)](https://github.com/)
+[![Tests](https://img.shields.io/badge/Tests-49%2F49%20Passing%20(100%25)-brightgreen?style=for-the-badge)](https://github.com/Bekafi01/movie-recommender/actions)
 
 **An end-to-end, production-grade recommendation platform combining Dense Semantic Vector Search, Matrix Factorization, Deep Neural CF, Two-Stage Hybrid Retrieval with MMR Diversity Re-Ranking, and a luxury Cinema UI.**
 
@@ -169,7 +170,7 @@ The system was evaluated against **550 qualified test users** ($\ge 5$ historica
 #### Using `uv` (Recommended — 10x Faster):
 ```powershell
 # Clone repository
-git clone https://github.com/your-username/movie-recommender.git
+git clone https://github.com/Bekafi01/movie-recommender.git
 cd movie-recommender
 
 # Create environment and sync dependencies
