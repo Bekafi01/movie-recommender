@@ -38,24 +38,12 @@ htmlcov/
 # Streamlit secrets & config
 .streamlit/secrets.toml
 
-# Data files (raw & processed)
+# Raw data files only (keep processed datasets tracked for fast zero-setup deployments)
 data/raw/*.csv
 data/raw/*.zip
-data/processed/*.parquet
-data/processed/*.db
-data/processed/*.sqlite
-data/processed/*.csv
+data/raw/*.json
 
-# Artifacts (models, embeddings, benchmarks)
-artifacts/embeddings/*.npy
-artifacts/embeddings/*.bin
-artifacts/embeddings/*.faiss
-artifacts/models/*.pkl
-artifacts/models/*.pt
-artifacts/models/*.pth
-artifacts/models/*.joblib
-artifacts/benchmarks/*.json
-artifacts/benchmarks/*.png
+# Scratch directories
 artifacts/scratch/
 
 # OS / IDE
@@ -63,5 +51,3 @@ artifacts/scratch/
 Thumbs.db
 *.swp
 *.swo
-
-docs/
